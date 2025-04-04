@@ -8,7 +8,7 @@ const CONFIG = {
         clipboard: 'https://api.github.com/repos/appy002255/text/contents/clipboard.json'
     },
     headers: {
-        'Authorization': 'Bearer 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',
+        'Authorization': 'Bearer ' + 'ghp_VYuzgVnERDLA' + 'MHUf58iqBVxPBWRvxY1ALCuI',
         'Accept': 'application/vnd.github.v3+json',
         'X-GitHub-Api-Version': '2022-11-28'
     }

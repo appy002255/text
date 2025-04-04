@@ -40,6 +40,7 @@ function updateComputerFilter(logs) {
     const currentValue = computerFilter.value;
     
     // 收集所有電腦名稱
+    const computerNames = new Set();
     logs.forEach(log => {
         if (log.computer_name) {
             computerNames.add(log.computer_name);

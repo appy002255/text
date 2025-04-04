@@ -1,139 +1,217 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Microsoft JhengHei', Arial, sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
+    padding: 20px;
+    background-color: #1e1e1e;
+    color: #ffffff;
 }
 
 .container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
 h1 {
-    color: #333;
+    color: #00ff00;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    font-size: 2em;
 }
 
 .controls {
-    background-color: white;
-    padding: 15px;
+    background-color: #2d2d2d;
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 20px;
 }
 
 .control-group {
     display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+    align-items: center;
 }
 
 .control-group:last-child {
     margin-bottom: 0;
 }
 
-select, input, button {
-    padding: 8px;
-    border: 1px solid #ddd;
+select, input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px;
+    border: 1px solid #3d3d3d;
     border-radius: 4px;
+    background-color: #383838;
+    color: #ffffff;
     font-size: 14px;
 }
 
-select, input[type="datetime-local"] {
-    flex: 1;
+select:focus, input:focus {
+    outline: none;
+    border-color: #0078d4;
+    box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
 }
 
 #searchInput {
     flex: 2;
+    min-width: 300px;
 }
 
 button {
-    background-color: #007bff;
+    padding: 10px 20px;
+    background-color: #0078d4;
     color: white;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    min-width: 120px;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #106ebe;
+    transform: translateY(-1px);
 }
 
-.log-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+button:active {
+    transform: translateY(0);
 }
 
+/* 電腦標題樣式 */
+.computer-header {
+    background-color: #2d2d2d;
+    color: #16c60c;
+    padding: 12px 15px;
+    margin: 30px 0 15px 0;
+    border-radius: 4px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-left: 4px solid #16c60c;
+}
+
+.computer-header:first-child {
+    margin-top: 0;
+}
+
+/* 日期標題樣式 */
+.date-header {
+    background-color: #383838;
+    color: #0078d4;
+    padding: 8px 15px;
+    margin: 15px 0 10px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+/* 日誌條目樣式 */
 .log-entry {
-    margin-bottom: 20px;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-    transition: background-color 0.3s;
+    background-color: #2d2d2d;
+    padding: 12px 15px;
+    margin: 0 0 8px 40px;
+    border-radius: 4px;
+    border-left: 4px solid #0078d4;
 }
 
-.log-entry:hover {
-    background-color: #f8f9fa;
+.log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.9em;
 }
 
 .timestamp {
-    color: #666;
-    font-size: 0.9em;
-    margin-bottom: 5px;
+    color: #0078d4;
 }
 
 .computer-name {
-    color: #007bff;
+    color: #16c60c;
+}
+
+.log-body {
+    margin-left: 20px;
+}
+
+.ip-info {
+    color: #c586c0;
     font-size: 0.9em;
     margin-bottom: 5px;
 }
 
 .text-content {
-    white-space: pre-wrap;
-    margin-top: 10px;
-    line-height: 1.5;
+    color: #ffffff;
+    word-break: break-all;
+    line-height: 1.4;
 }
 
 .status {
-    text-align: center;
-    margin: 10px 0;
-    padding: 10px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
     border-radius: 4px;
+    display: none;
+    z-index: 1000;
 }
 
-.success {
-    background-color: #d4edda;
-    color: #155724;
+.status.success {
+    background-color: #16c60c;
+    color: white;
 }
 
-.error {
-    background-color: #f8d7da;
-    color: #721c24;
+.status.error {
+    background-color: #e81123;
+    color: white;
 }
 
-@media (max-width: 600px) {
-    .container {
-        padding: 10px;
-    }
-    
+/* 響應式設計 */
+@media (max-width: 768px) {
     .controls {
+        grid-template-columns: 1fr;
+    }
+    
+    body {
         padding: 10px;
-    }
-    
-    .control-group {
-        flex-direction: column;
-        gap: 5px;
-    }
-    
-    .log-container {
-        padding: 15px;
     }
     
     .log-entry {
-        padding: 10px;
+        margin-left: 20px;
     }
+    
+    .date-header {
+        margin-left: 10px;
+    }
+    
+    .log-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .log-body {
+        margin-left: 0;
+    }
+}
+
+/* 自定義滾動條 */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00ff00;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00cc00;
 } 

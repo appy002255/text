@@ -1,0 +1,139 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.controls {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.control-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.control-group:last-child {
+    margin-bottom: 0;
+}
+
+select, input, button {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+select, input[type="datetime-local"] {
+    flex: 1;
+}
+
+#searchInput {
+    flex: 2;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.log-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.log-entry {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s;
+}
+
+.log-entry:hover {
+    background-color: #f8f9fa;
+}
+
+.timestamp {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.computer-name {
+    color: #007bff;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.text-content {
+    white-space: pre-wrap;
+    margin-top: 10px;
+    line-height: 1.5;
+}
+
+.status {
+    text-align: center;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .controls {
+        padding: 10px;
+    }
+    
+    .control-group {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .log-container {
+        padding: 15px;
+    }
+    
+    .log-entry {
+        padding: 10px;
+    }
+} 

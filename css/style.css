@@ -1,217 +1,286 @@
 body {
-    font-family: 'Microsoft JhengHei', Arial, sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: #1e1e1e;
-    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    background-color: #000000;
+    color: #1a8c1a;
+    text-shadow: 0 0 3px #1a8c1a;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
 }
 
 h1 {
-    color: #00ff00;
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 2em;
+    color: #33FF33;
+    border-bottom: 1px solid #1a8c1a;
+    padding-bottom: 10px;
+    font-size: 24px;
+    text-shadow: 0 0 8px #1a8c1a;
+    animation: textPulse 2s infinite;
+}
+
+@keyframes textPulse {
+    0% { text-shadow: 0 0 3px #1a8c1a; }
+    50% { text-shadow: 0 0 12px #1a8c1a; }
+    100% { text-shadow: 0 0 3px #1a8c1a; }
+}
+
+h1::before {
+    content: 'GXTRO';
+    color: #33FF33;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    margin-right: 10px;
+    text-shadow: 0 0 10px #33FF33;
 }
 
 .controls {
-    background-color: #2d2d2d;
-    padding: 20px;
-    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    border: 1px solid #1a8c1a;
+    border-radius: 5px;
     margin-bottom: 20px;
+    box-shadow: 0 0 10px #1a8c1a;
 }
 
 .control-group {
+    margin-bottom: 10px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 15px;
-    align-items: center;
+    gap: 10px;
 }
 
-.control-group:last-child {
-    margin-bottom: 0;
+select, input, button {
+    background-color: #000000;
+    color: #1a8c1a;
+    border: 1px solid #1a8c1a;
+    padding: 5px 10px;
+    font-family: 'Courier New', monospace;
+    outline: none;
+    text-shadow: 0 0 3px #1a8c1a;
+    box-shadow: 0 0 5px #1a8c1a;
 }
 
-select, input {
-    flex: 1;
-    min-width: 200px;
-    padding: 10px;
-    border: 1px solid #3d3d3d;
-    border-radius: 4px;
-    background-color: #383838;
-    color: #ffffff;
-    font-size: 14px;
+select:hover, input:hover, button:hover {
+    background-color: #1a8c1a;
+    color: #000000;
+    box-shadow: 0 0 10px #1a8c1a;
 }
 
 select:focus, input:focus {
-    outline: none;
-    border-color: #0078d4;
-    box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
-}
-
-#searchInput {
-    flex: 2;
-    min-width: 300px;
+    border-color: #1a8c1a;
+    box-shadow: 0 0 10px #1a8c1a;
 }
 
 button {
-    padding: 10px 20px;
-    background-color: #0078d4;
-    color: white;
-    border: none;
-    border-radius: 4px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 14px;
-    min-width: 120px;
-}
-
-button:hover {
-    background-color: #106ebe;
-    transform: translateY(-1px);
+    transition: all 0.3s;
 }
 
 button:active {
-    transform: translateY(0);
+    background-color: #1a8c1a;
+    color: #000000;
 }
 
-/* 電腦標題樣式 */
-.computer-header {
-    background-color: #2d2d2d;
-    color: #16c60c;
-    padding: 12px 15px;
-    margin: 30px 0 15px 0;
-    border-radius: 4px;
-    font-size: 1.2em;
-    font-weight: bold;
-    border-left: 4px solid #16c60c;
+.status {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
-.computer-header:first-child {
-    margin-top: 0;
+.status.success {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #1a8c1a;
+    border: 1px solid #1a8c1a;
+    box-shadow: 0 0 5px #1a8c1a;
 }
 
-/* 日期標題樣式 */
-.date-header {
-    background-color: #383838;
-    color: #0078d4;
-    padding: 8px 15px;
-    margin: 15px 0 10px 20px;
-    border-radius: 4px;
-    font-weight: bold;
-    font-size: 1em;
+.status.error {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #8c1a1a;
+    border: 1px solid #8c1a1a;
+    box-shadow: 0 0 5px #8c1a1a;
 }
 
-/* 日誌條目樣式 */
+.log-container {
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 1px solid #33FF33;
+    border-radius: 5px;
+    padding: 10px;
+    height: calc(100vh - 250px);
+    overflow-y: auto;
+    box-shadow: 0 0 10px #33FF33;
+}
+
 .log-entry {
-    background-color: #2d2d2d;
-    padding: 12px 15px;
-    margin: 0 0 8px 40px;
-    border-radius: 4px;
-    border-left: 4px solid #0078d4;
+    border-left: 3px solid #1a8c1a;
+    padding: 10px;
+    margin-bottom: 10px;
+    position: relative;
+    background-color: rgba(26, 140, 26, 0.05);
+    transition: all 0.3s ease;
+}
+
+.log-entry:hover {
+    background-color: rgba(26, 140, 26, 0.1);
+    box-shadow: 0 0 8px #1a8c1a;
+}
+
+/* 移除之前的 PPC 標記 */
+.log-entry::before {
+    content: none;
+}
+
+/* 鍵盤記錄樣式 */
+.log-entry[data-type="keyboard"] {
+    border-left: 3px solid #1a8c1a;
+    color: #1a8c1a;
+}
+
+/* 瀏覽器記錄樣式 */
+.log-entry[data-type="browser"] {
+    border-left: 3px solid #1a5c99;
+    color: #1a5c99;
+}
+
+.log-entry[data-type="browser"] .text-content {
+    color: #1a5c99;
+}
+
+.log-entry[data-type="browser"] .text-content a {
+    color: #1a5c99;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.log-entry[data-type="browser"] .text-content a:hover {
+    color: #1a5c99;
+    text-shadow: 0 0 5px rgba(26, 92, 153, 0.5);
+    text-decoration: underline;
+}
+
+.computer-name {
+    color: #8c8c1a;
+    font-weight: bold;
+    margin-right: 10px;
+    text-shadow: 0 0 3px #8c8c1a;
 }
 
 .log-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    font-size: 0.9em;
+    margin-bottom: 5px;
+    color: #66FF66;
 }
 
 .timestamp {
-    color: #0078d4;
-}
-
-.computer-name {
-    color: #16c60c;
-}
-
-.log-body {
-    margin-left: 20px;
-}
-
-.ip-info {
-    color: #c586c0;
-    font-size: 0.9em;
-    margin-bottom: 5px;
+    color: #1a8c8c;
+    text-shadow: 0 0 3px #1a8c8c;
 }
 
 .text-content {
-    color: #ffffff;
+    white-space: pre-wrap;
     word-break: break-all;
-    line-height: 1.4;
+    margin: 10px 0;
+    font-family: 'Courier New', monospace;
+    color: #1a8c1a;
 }
 
-.status {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 10px 20px;
-    border-radius: 4px;
-    display: none;
-    z-index: 1000;
+.log-footer {
+    color: #FF9933;
+    font-size: 0.9em;
 }
 
-.status.success {
-    background-color: #16c60c;
-    color: white;
+/* 密碼輸入界面樣式 */
+.password-overlay {
+    background-color: rgba(0, 0, 0, 0.95) !important;
 }
 
-.status.error {
-    background-color: #e81123;
-    color: white;
+.password-container {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    border: 1px solid #1a8c1a !important;
+    color: #1a8c1a !important;
+    padding: 30px !important;
+    border-radius: 5px !important;
+    box-shadow: 0 0 10px #1a8c1a !important;
 }
 
-/* 響應式設計 */
-@media (max-width: 768px) {
-    .controls {
-        grid-template-columns: 1fr;
-    }
-    
-    body {
-        padding: 10px;
-    }
-    
-    .log-entry {
-        margin-left: 20px;
-    }
-    
-    .date-header {
-        margin-left: 10px;
-    }
-    
-    .log-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-    
-    .log-body {
-        margin-left: 0;
-    }
+.password-container h2 {
+    color: #1a8c1a !important;
+    margin-bottom: 20px !important;
+    text-shadow: 0 0 3px #1a8c1a !important;
+    font-family: 'Courier New', monospace !important;
 }
 
-/* 自定義滾動條 */
+.password-container input {
+    background-color: #000000 !important;
+    color: #1a8c1a !important;
+    border: 1px solid #1a8c1a !important;
+    padding: 10px !important;
+    width: 250px !important;
+    font-family: 'Courier New', monospace !important;
+    text-shadow: 0 0 3px #1a8c1a !important;
+    box-shadow: 0 0 5px #1a8c1a !important;
+    transition: all 0.3s ease !important;
+}
+
+.password-container input:focus {
+    box-shadow: 0 0 10px #1a8c1a !important;
+    outline: none !important;
+}
+
+.password-container button {
+    background-color: #000000 !important;
+    color: #1a8c1a !important;
+    border: 1px solid #1a8c1a !important;
+    padding: 10px 20px !important;
+    cursor: pointer !important;
+    font-family: 'Courier New', monospace !important;
+    margin-top: 20px !important;
+    text-shadow: 0 0 3px #1a8c1a !important;
+    box-shadow: 0 0 5px #1a8c1a !important;
+    transition: all 0.3s ease !important;
+}
+
+.password-container button:hover {
+    background-color: #1a8c1a !important;
+    color: #000000 !important;
+    box-shadow: 0 0 10px #1a8c1a !important;
+}
+
+/* 滾動條樣式 */
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 12px;
+    height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #1a1a1a;
+    background: rgba(30, 30, 30, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(128, 128, 128, 0.1);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #00ff00;
-    border-radius: 5px;
+    background: rgba(128, 128, 128, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(128, 128, 128, 0.2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #00cc00;
+    background: rgba(128, 128, 128, 0.3);
+    border: 1px solid rgba(128, 128, 128, 0.5);
+}
+
+::-webkit-scrollbar-corner {
+    background: rgba(30, 30, 30, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 } 
